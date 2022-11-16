@@ -1,0 +1,57 @@
+const { EmbedBuilder } = require("discord.js");
+const Parser = require("rss-parser");
+const parser = new Parser();
+const fs = require("fs");
+
+module.exports = (client) => {
+  client.checkVideo = async () => {
+    const data = await parser
+      .parseURL(
+        "" //here place https://www.youtube.com/feeds/videos.xml?channel_id= with your channel id
+      )
+      .catch(console.error);
+
+    const rawData = fs.readFileSync(`${__dirname}/../../json/video.json`);
+    const jsonData = JSON.parse(rawData);
+
+    if (jsonData.id !== data.items[0].id) {
+      //this means theres a new video or video not sent
+      fs.writeFileSync(
+        `${__dirname}/../../json/video.json`,
+        JSON.stringify({ id: data.items[0].id })
+      );
+
+      const guild = await client.guilds
+        .fetch("") // discord server id
+        .catch(console.error);
+      const channel = await guild.channels
+        .fetch("") //channel id to post video notifications
+        .catch(console.error);
+
+      const { title, link, id, author } = data.items[0];
+      const embed = new EmbedBuilder({
+        title: title,
+        url: link,
+        timestamp: Date.now(),
+        image: {
+          url: `https://img.youtube.com/vi/${id.slice(9)}/maxresdefault.jpg`,
+        },
+        author: {
+          name: author,
+          iconURL: ``, //url for your channel icon
+          url: "", //url link to your youtue channel
+        },
+        footer: {
+          text: client.user.tag,
+          iconURL: client.user.displayAvatarURL(),
+        },
+      });
+      await channel
+        .send({
+          embeds: [embed],
+          content: `@everyone OMG this might be the best video yet...!!`,
+        })
+        .catch(console.error);
+    }
+  };
+};

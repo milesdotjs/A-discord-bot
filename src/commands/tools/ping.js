@@ -9,9 +9,11 @@ module.exports = {
       fetchReply: true,
     });
 
-    const newMessage = `API Latency: ${client.ws.ping}\nClient Ping: ${
+    const newMessage = `API Latency: ${
+      client.ws.ping
+    }\nIm not lagging... I just have ${
       message.createdTimestamp - interaction.createdTimestamp
-    }`;
+    } ping haha 😅`;
     await interaction.editReply({
       content: newMessage,
     });
