@@ -1,5 +1,6 @@
 require("dotenv").config();
-const { youtubeEnv, guildEnv, discChannelEnv } = process.env;
+const { youtubeEnv, guildEnv, discChannelEnv, youtubePicEnv, youtubeAccEnv } =
+  process.env;
 const { EmbedBuilder } = require("discord.js");
 const Parser = require("rss-parser");
 const parser = new Parser();
@@ -40,8 +41,8 @@ module.exports = (client) => {
         },
         author: {
           name: author,
-          iconURL: ``, //url for your channel icon
-          url: "", //url link to your youtue channel
+          iconURL: youtubePicEnv, //url for your channel icon
+          url: youtubeAccEnv, //url link to your youtue channel
         },
         footer: {
           text: client.user.tag,
