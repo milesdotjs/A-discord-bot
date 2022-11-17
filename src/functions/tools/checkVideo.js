@@ -1,13 +1,15 @@
+require("dotenv").config();
+const { youtubeEnv, guildEnv, discChannelEnv } = process.env;
 const { EmbedBuilder } = require("discord.js");
 const Parser = require("rss-parser");
 const parser = new Parser();
 const fs = require("fs");
-
+console.log(youtubeEnv);
 module.exports = (client) => {
   client.checkVideo = async () => {
     const data = await parser
       .parseURL(
-        "" //here place https://www.youtube.com/feeds/videos.xml?channel_id= with your channel id
+        `https://www.youtube.com/feeds/videos.xml?channel_id=${youtubeEnv}` //here place https://www.youtube.com/feeds/videos.xml?channel_id= with your channel id
       )
       .catch(console.error);
 
@@ -22,10 +24,10 @@ module.exports = (client) => {
       );
 
       const guild = await client.guilds
-        .fetch("") // discord server id
+        .fetch(guildEnv) // discord server id
         .catch(console.error);
       const channel = await guild.channels
-        .fetch("") //channel id to post video notifications
+        .fetch(discChannelEnv) //channel id to post video notifications
         .catch(console.error);
 
       const { title, link, id, author } = data.items[0];
