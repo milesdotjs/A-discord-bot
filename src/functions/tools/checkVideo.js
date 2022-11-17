@@ -52,7 +52,7 @@ module.exports = (client) => {
       await channel
         .send({
           embeds: [embed],
-          content: `@everyone OMG this might be the best video yet...!!`,
+          content: `OMG this might be the best video yet...!!`,
         })
         .catch(console.error);
     }
